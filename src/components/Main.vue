@@ -23,6 +23,7 @@ import InferReal from './sections/InferReal.vue'
 export default {
   components: {
     Title,
+    InferReal,
     Abstract,
     Markdown,
     BibTeX,
@@ -41,7 +42,7 @@ export default {
     GaussianSplats3D,
     PdfReader,
     Curve,
-    InferReal
+    
   }
 }
 </script>
@@ -50,6 +51,7 @@ export default {
   <Title/>
   <!-- <Carousel/> -->
   <Video/>
+  <InferReal/>
   <Abstract/>
   <Markdown/>
   <Latex/>
@@ -58,7 +60,7 @@ export default {
   <Echart/>
   <!-- <Model3D/> -->
   <!-- <GaussianSplats3D/> -->
-  <InferReal/>
+  
   <SeletionForComparison/>
   <PdfReader/>
   <Curve/>

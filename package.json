@@ -14,7 +14,7 @@
     "@mkkellogg/gaussian-splats-3d": "^0.4.6",
     "echarts": "^5.4.3",
     "element-plus": "^2.9.1",
-    "katex": "^0.13.24",
+    "katex": "^0.13.11",
     "rehype-katex": "^7.0.1",
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",

@@ -1,6 +1,11 @@
 <template>
+   <el-divider />
+
+  <el-row justify="center">
+    <h1 class="section-title">Try RTDNet on your own video</h1>
+  </el-row>
   <div class="infer-real-container">
-    <h2>Gaze Estimation</h2>
+    <!-- <h2>Gaze Estimation</h2> -->
     
     <!-- 视频上传和预览区域 -->
     <div class="upload-section">
@@ -11,7 +16,7 @@
           @click="resetVideo"
           :disabled="isUploading || isProcessing"
         >
-          <i class="fas fa-sync-alt"></i> 重新选择视频
+          <i class="fas fa-sync-alt"></i> Reselect Video
         </button>
       </div>
 
@@ -33,7 +38,7 @@
           @click="triggerFileInput"
         >
           <i class="fas fa-cloud-upload-alt"></i>
-          <p>点击或拖拽视频文件到此处</p>
+          <p>Click or drag video file here</p>
         </div>
         <video 
           v-else 
@@ -53,7 +58,7 @@
         @click="startUpload"
         :disabled="!uploadedVideo || isUploading"
       >
-        {{ isUploading ? '上传中...' : '上传视频' }}
+        {{ isUploading ? 'Uploading...' : 'Upload Video' }}
       </button>
 
       <button 
@@ -61,7 +66,7 @@
         @click="startInference"
         :disabled="!uploadSuccess || isProcessing"
       >
-        {{ isProcessing ? '推理中...' : '开始推理' }}
+        {{ isProcessing ? 'Processing...' : 'Start Inference' }}
       </button>
     </div>
 
@@ -78,21 +83,21 @@
 
     <!-- 结果视频展示 -->
     <div v-if="resultVideo" class="result-section">
-      <h3>推理结果</h3>
+      <h3>Inference Result</h3>
       <div class="download-buttons">
         <button 
           class="download-button"
           @click="downloadVideo('original')"
         >
           <i class="fas fa-download"></i>
-          下载原始视频结果
+          Download Original Result
         </button>
         <button 
           class="download-button"
           @click="downloadVideo('face')"
         >
           <i class="fas fa-download"></i>
-          下载人脸视频结果
+          Download Face Result
         </button>
       </div>
     </div>
@@ -139,7 +144,7 @@ export default {
     },
     addLog(message, type = 'info') {
       this.logs.push({ message, type })
-      // 自动滚动到最新日志
+      // Auto scroll to latest log
       this.$nextTick(() => {
         const console = this.$refs.consoleOutput
         console.scrollTop = console.scrollHeight
@@ -151,7 +156,7 @@ export default {
       this.isUploading = true
       this.progress = 0
       this.logs = []
-      this.addLog('开始上传视频...', 'info')
+      this.addLog('Starting video upload...', 'info')
 
       try {
         await new Promise((resolve, reject) => {
@@ -164,7 +169,7 @@ export default {
             if (event.lengthComputable) {
               const percentComplete = Math.round((event.loaded / event.total) * 100)
               this.progress = percentComplete
-              this.addLog(`上传进度: ${percentComplete}%`, 'info')
+              this.addLog(`Upload progress: ${percentComplete}%`, 'info')
             }
           }
 
@@ -176,10 +181,10 @@ export default {
               this.uploadSuccess = true
               resolve(result)
             } else {
-              let errorMessage = '上传失败'
+              let errorMessage = 'Upload failed'
               try {
                 const errorResponse = JSON.parse(xhr.responseText)
-                errorMessage = errorResponse.detail || '上传失败'
+                errorMessage = errorResponse.detail || 'Upload failed'
               } catch (e) {}
               this.addLog('❌ ' + errorMessage, 'error')
               reject(new Error(errorMessage))
@@ -187,13 +192,13 @@ export default {
           }
 
           xhr.onerror = () => {
-            this.addLog('❌ 网络错误，请检查网络连接', 'error')
-            reject(new Error('网络错误'))
+            this.addLog('❌ Network error, please check network connection', 'error')
+            reject(new Error('Network error'))
           }
 
           xhr.onabort = () => {
-            this.addLog('❌ 上传已取消', 'error')
-            reject(new Error('上传已取消'))
+            this.addLog('❌ Upload cancelled', 'error')
+            reject(new Error('Upload cancelled'))
           }
 
           xhr.open('POST', 'http://localhost:6006/upload-video')
@@ -214,15 +219,15 @@ export default {
       this.isProcessing = true
       this.progress = 0
       this.logs = []
-      this.addLog('开始推理...', 'info')
+      this.addLog('Starting inference...', 'info')
 
       try {
-        // 关闭之前可能存在的 SSE 连接
+        // Close any existing SSE connection
         if (this.inferenceEventSource) {
           this.inferenceEventSource.close()
         }
 
-        // 建立新的 SSE 连接
+        // Establish new SSE connection
         this.inferenceEventSource = new EventSource('http://localhost:6006/inference-progress')
         
         this.inferenceEventSource.onmessage = (event) => {
@@ -236,12 +241,12 @@ export default {
         }
 
         this.inferenceEventSource.onerror = (error) => {
-          console.error('SSE 连接错误:', error)
+          console.error('SSE connection error:', error)
           this.inferenceEventSource.close()
-          this.addLog('❌ 进度更新连接失败', 'error')
+          this.addLog('❌ Progress update connection failed', 'error')
         }
 
-        // 发起推理请求
+        // Send inference request
         const response = await fetch('http://localhost:6006/start-inference', {
           method: 'POST',
           headers: {
@@ -251,26 +256,26 @@ export default {
         
         if (!response.ok) {
           const errorData = await response.json()
-          throw new Error(errorData.detail || '推理请求失败')
+          throw new Error(errorData.detail || 'Inference request failed')
         }
 
         const result = await response.json()
         
-        // 关闭 SSE 连接
+        // Close SSE connection
         if (this.inferenceEventSource) {
           this.inferenceEventSource.close()
           this.inferenceEventSource = null
         }
         
-        // 设置结果状态
+        // Set result status
         this.resultVideo = true
         
-        this.addLog('✅ 推理完成！', 'success')
+        this.addLog('✅ Inference completed!', 'success')
       } catch (error) {
         this.progress = 0
-        this.addLog(`❌ 推理失败: ${error.message}`, 'error')
+        this.addLog(`❌ Inference failed: ${error.message}`, 'error')
         
-        // 确保出错时关闭 SSE 连接
+        // Ensure error closes SSE connection
         if (this.inferenceEventSource) {
           this.inferenceEventSource.close()
           this.inferenceEventSource = null
@@ -279,39 +284,39 @@ export default {
         this.isProcessing = false
       }
     },
-    // 添加新方法：检查视频是否可用
+    // Add new method: Check if videos are available
     async checkVideosAvailable() {
-      const timeout = 30000 // 30秒超时
+      const timeout = 30000 // 30 seconds timeout
       const startTime = Date.now()
       
       while (Date.now() - startTime < timeout) {
         try {
-          // 检查两个视频是否都可以访问
+          // Check if both videos can be accessed
           const [originalRes, faceRes] = await Promise.all([
             fetch(this.resultVideoUrl, { method: 'HEAD' }),
             fetch(this.faceVideoUrl, { method: 'HEAD' })
           ])
           
           if (originalRes.ok && faceRes.ok) {
-            return true // 两个视频都可以访问
+            return true // Both videos can be accessed
           }
         } catch (error) {
-          console.log('等待视频可用...')
+          console.log('Waiting for videos to be available...')
         }
         
-        // 等待1秒后重试
+        // Wait 1 second before retrying
         await new Promise(resolve => setTimeout(resolve, 1000))
       }
       
-      throw new Error('视频加载超时')
+      throw new Error('Videos load timeout')
     },
     resetVideo() {
-      // 释放之前创建的 URL
+      // Release previously created URL
       if (this.uploadedVideoUrl) {
         URL.revokeObjectURL(this.uploadedVideoUrl)
       }
       
-      // 重置所有相关状态
+      // Reset all related states
       this.uploadedVideo = null
       this.uploadedVideoUrl = null
       this.uploadSuccess = false
@@ -320,18 +325,18 @@ export default {
       this.progress = 0
       this.logs = []
       
-      // 清空文件输入
+      // Clear file input
       if (this.$refs.fileInput) {
         this.$refs.fileInput.value = ''
       }
       
-      // 关闭 SSE 连接
+      // Close SSE connection
       if (this.inferenceEventSource) {
         this.inferenceEventSource.close()
         this.inferenceEventSource = null
       }
       
-      // 清除视频URL时使用 URL.revokeObjectURL
+      // Clear video URL when faceVideoUrl is cleared
       if (this.faceVideoUrl) {
         URL.revokeObjectURL(this.faceVideoUrl)
       }
@@ -348,10 +353,10 @@ export default {
           ? 'infer_original.mp4'
           : 'infer_face.mp4'
 
-        this.addLog(`开始下载${type === 'original' ? '原始' : '人脸'}视频...`, 'info')
+        this.addLog(`Starting download of ${type === 'original' ? 'original' : 'face'} video...`, 'info')
         
         const response = await fetch(url)
-        if (!response.ok) throw new Error('下载失败')
+        if (!response.ok) throw new Error('Download failed')
         
         const blob = await response.blob()
         const downloadUrl = window.URL.createObjectURL(blob)
@@ -363,12 +368,12 @@ export default {
         link.click()
         document.body.removeChild(link)
         
-        // 清理 URL 对象
+        // Clean up URL objects
         window.URL.revokeObjectURL(downloadUrl)
         
-        this.addLog(`✅ ${type === 'original' ? '原始' : '人脸'}视频下载完成`, 'success')
+        this.addLog(`✅ ${type === 'original' ? 'Original' : 'Face'} video download complete`, 'success')
       } catch (error) {
-        this.addLog(`❌ 下载失败: ${error.message}`, 'error')
+        this.addLog(`❌ Download failed: ${error.message}`, 'error')
       }
     }
   }

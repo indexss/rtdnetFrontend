@@ -15,7 +15,7 @@ const fetchData = async () => {
 </script>
 
 <template>
-  <div>
+  <div class="video-section">
     <el-divider />
 
     <el-row justify="center">
@@ -28,7 +28,7 @@ const fetchData = async () => {
 
         <!-- local -->
         <el-container class="video-container">
-          <video controls muted preload playsinline>
+          <video controls muted preload playsinline class="video-player">
             <source src="/video/visulization_video.mp4" type="video/mp4">
           </video>
         </el-container>
@@ -45,9 +45,11 @@ const fetchData = async () => {
       </el-col>
     </el-row>
 
-    <el-row justify="center" class="button-container">
-      <el-button type="primary" @click="fetchData">获取数据</el-button>
-    </el-row>
+    <!-- <el-row justify="center" class="button-container">
+      <el-button type="primary" size="large" @click="fetchData" class="fetch-button">
+        获取数据
+      </el-button>
+    </el-row> -->
 
     <el-row justify="center" v-if="responseText" class="response-container">
       <el-col :xs="24" :sm="20" :md="16" :lg="12" :xl="10">
@@ -58,29 +60,62 @@ const fetchData = async () => {
 </template>
 
 <style scoped>
-
-.video-container{
-  margin: 20px 0px 0px 0px;
+.video-section {
+  padding: 2rem 0;
 }
 
-iframe, video {
+.section-title {
+  font-size: 2.5rem;
+  color: #303133;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.video-container {
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.video-player {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background-color: #000;
+}
+
+iframe {
   aspect-ratio: 16 / 9;
   width: 100%;
 }
 
 .button-container {
-  margin-top: 20px;
+  margin-top: 2rem;
+}
+
+.fetch-button {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.fetch-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .response-container {
-  margin-top: 20px;
+  margin-top: 2rem;
 }
 
 .response-text {
-  padding: 15px;
+  padding: 1.5rem;
   background-color: #f5f7fa;
-  border-radius: 4px;
+  border-radius: 8px;
   white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  border: 1px solid #e4e7ed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-
 </style>
