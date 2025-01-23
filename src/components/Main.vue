@@ -16,6 +16,9 @@ import Comment from './sections/Comment.vue'
 import Latex from './sections/Latex.vue'
 import Model3D from './sections/Model3D.vue'
 import GaussianSplats3D from './sections/GaussianSplats3D.vue'
+import PdfReader from './sections/PdfReader.vue'
+import Curve from './sections/Curve.vue'
+import InferReal from './sections/InferReal.vue'
 
 export default {
   components: {
@@ -35,27 +38,33 @@ export default {
     Comment,
     Latex,
     Model3D,
-    GaussianSplats3D
+    GaussianSplats3D,
+    PdfReader,
+    Curve,
+    InferReal
   }
 }
 </script>
 
 <template>
   <Title/>
-  <Carousel/>
+  <!-- <Carousel/> -->
   <Video/>
   <Abstract/>
   <Markdown/>
   <Latex/>
   <Table/>
-  <Collapse/>
+  <!-- <Collapse/> -->
   <Echart/>
-  <Model3D/>
-  <GaussianSplats3D/>
+  <!-- <Model3D/> -->
+  <!-- <GaussianSplats3D/> -->
+  <InferReal/>
   <SeletionForComparison/>
-  <ImageSliderInner/>
-  <ImageSlider/>
-  <ImageSelector/>
+  <PdfReader/>
+  <Curve/>
+  <!-- <ImageSliderInner/> -->
+  <!-- <ImageSlider/> -->
+  <!-- <ImageSelector/> -->
   <BibTeX/>
-  <Comment/>
+  <!-- <Comment/> -->
 </template>

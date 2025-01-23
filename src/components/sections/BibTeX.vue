@@ -3,11 +3,11 @@ export default {
   data() {
     return {
       bibtex: [
-        "@article{junyaohu2023template,",
-        "    title={Academic Project Page Template Vue},",
-        "    author={Hu, Junyao},",
+        "@article{linlishi2024rtdnet,",
+        "    title={RTDNet: A Recurrent Network using Temporal Difference for Video Gaze Estimation},",
+        "    author={Shi, Linli and Liang, Shicheng and Zhu, Heyan and Cheng, Yihua and Wu, Han and Chang, Hyung Jin},",
         "    journal={GitHub},",
-        "    year={2023}",
+        "    year={2024}",
         "}",
       ],
     }
